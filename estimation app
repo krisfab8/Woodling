@@ -1,0 +1,64 @@
+import React, { useState } from "react";
+import { Button, Input, Select, Card, CardContent } from "@/components/ui";
+
+const CarpentryEstimator = () => {
+  const [width, setWidth] = useState(0);
+  const [height, setHeight] = useState(0);
+  const [depth, setDepth] = useState(0);
+  const [material, setMaterial] = useState("MDF");
+  const [finish, setFinish] = useState("Painted");
+  const [estimate, setEstimate] = useState(null);
+
+  const materialCosts = { MDF: 36, Plywood: 50, Hardwood: 80 };
+  const finishMultiplier = { Painted: 1.2, Varnished: 1.5, Unfinished: 1 };
+
+  const calculateEstimate = () => {
+    const baseCost = (width * height * depth * 0.000001) * materialCosts[material];
+    const finalCost = baseCost * finishMultiplier[finish];
+    setEstimate(finalCost.toFixed(2));
+  };
+
+  return (
+    <div className="p-4 max-w-lg mx-auto">
+      <Card>
+        <CardContent>
+          <h2 className="text-xl font-bold mb-4">Carpentry Cost Estimator</h2>
+          <div className="mb-2">
+            <label>Width (mm):</label>
+            <Input type="number" value={width} onChange={(e) => setWidth(e.target.value)} />
+          </div>
+          <div className="mb-2">
+            <label>Height (mm):</label>
+            <Input type="number" value={height} onChange={(e) => setHeight(e.target.value)} />
+          </div>
+          <div className="mb-2">
+            <label>Depth (mm):</label>
+            <Input type="number" value={depth} onChange={(e) => setDepth(e.target.value)} />
+          </div>
+          <div className="mb-2">
+            <label>Material:</label>
+            <Select value={material} onChange={(e) => setMaterial(e.target.value)}>
+              <option value="MDF">MDF</option>
+              <option value="Plywood">Plywood</option>
+              <option value="Hardwood">Hardwood</option>
+            </Select>
+          </div>
+          <div className="mb-2">
+            <label>Finish:</label>
+            <Select value={finish} onChange={(e) => setFinish(e.target.value)}>
+              <option value="Painted">Painted</option>
+              <option value="Varnished">Varnished</option>
+              <option value="Unfinished">Unfinished</option>
+            </Select>
+          </div>
+          <Button onClick={calculateEstimate} className="mt-4">Calculate Estimate</Button>
+          {estimate && (
+            <p className="mt-4 font-bold">Estimated Cost: £{estimate}</p>
+          )}
+        </CardContent>
+      </Card>
+    </div>
+  );
+};
+
+export default CarpentryEstimator;
